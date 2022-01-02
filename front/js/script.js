@@ -1,7 +1,8 @@
 fetch(" http://localhost:3000/api/products") 
      .then(function (result){
          return result.json();
-         }) //Récupération des données de l'API.
+         }) 
+//Récupération des données de l'API.
 
 .then (function (articles){
   console.log(articles)
