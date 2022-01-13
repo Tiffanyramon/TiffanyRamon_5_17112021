@@ -122,13 +122,13 @@ lastName.addEventListener('change', function(event) {
     }
 })
 
-validateAddress.addEventListener('change', function(event) {
+address.addEventListener('change', function(event) {
     if(validateText(event.target.value)) {
         document.getElementById("addressErrorMsg").innerHTML = ""
     } 
 })
 
-alidateEmai.addEventListener('change', function(event) {
+email.addEventListener('change', function(event) {
     if(validateText(event.target.value)) {
         document.getElementById("emailErrorMsg").innerHTML = ""
     } else {
