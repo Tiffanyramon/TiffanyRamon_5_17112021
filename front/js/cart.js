@@ -2,7 +2,7 @@
 let articles = JSON.parse(localStorage.getItem("panier"));
 console.table(articles);
 
-//récipération des donnée de l'API.
+//récupération des donnée de l'API.
 let totalPrice = 0;
 let totalQuantity = 0; 
     articles.forEach(element => {
@@ -32,6 +32,8 @@ items.innerHTML += `<article class="cart__item" data-id="${element.idProduct}" d
             totalQuantity += element.choiceQuantity
    
     });
+
+//Créations de constances pout total+Quantité.
  const  total = document.getElementById("totalPrice");
  total.innerHTML = totalPrice
 
@@ -41,9 +43,15 @@ items.innerHTML += `<article class="cart__item" data-id="${element.idProduct}" d
  //Changer la quantité.
 
  const inputQantity = document.querySelectorAll(".itemQuantity");
-
+//Changement de la quantité au change
  inputQantity.forEach(function(input){
      input.addEventListener('change',function(event){
+         //La valeur doit être comprise entre 0 et 100.
+         if(event.target.value <=0 || event.target.value > 100){
+             alert('La quantité doit être entre 1 et 100.')
+             window.location.reload();
+             return;
+         }
          const idProduct = input.closest('article').dataset.id
          const choiceColors = input.closest('article').dataset.color
          
@@ -53,32 +61,137 @@ items.innerHTML += `<article class="cart__item" data-id="${element.idProduct}" d
          
      })
  })
+ //Supprimer un article.
+ const deleteButton = document.querySelectorAll('.deleteItem');
+//Suppression au clique.
+ deleteButton.forEach(function (button) {
+     button.addEventListener('click', function() {
+         const idProduct = button.closest('article').dataset.id
+         const choiceColors = button.closest('article').dataset.color
 
-// document.addEventListener('DOMContentLoader', function()
+         const index = articles.findIndex((element) => element.idProduct === idProduct && element.choiceColors === choiceColors)
 
+         articles.splice(index, 1);
 
+         localStorage.setItem("panier", JSON.stringify(articles));
 
- //Trouver un produit similaire dans le panier. 
+         window.location.reload()
+     })
+ })
+//Réglage du formulaire.
+const firstName = document.getElementById("firstName")
+const lastName = document.getElementById("lastName")
+const address = document.getElementById("address")
+const city = document.getElementById("city")
+const email = document.getElementById("email")
+//Texte valide sans chiffre dedans.
+function validateText(value) {
+     if(value.match(/^([^0-9]*)$/)) {
+         return true
+     }
+     return false
+}
+//Adresse valide avec une valeur dedans.
+function validateAddress(value) {
+     if(value) {
+         return true;
+     }
+     return false;
+}
+//Mail valide si @.
+function validateEmail(value) {
+     if(value.match(/\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/gi)) {
+         return true
+     }
+     return false;
+}
+//Validation au change.
+firstName.addEventListener('change', function(event) {
+    if(validateText(event.target.value)) {
+        document.getElementById("firstNameErrorMsg").innerHTML = ""
+    } else {
+        document.getElementById("firstNameErrorMsg").innerHTML = "Le prénom ne doit contenir que des lettres"
+    }
+})
 
+lastName.addEventListener('change', function(event) {
+    if(validateText(event.target.value)) {
+        document.getElementById("lastNameErrorMsg").innerHTML = ""
+    } else {
+        document.getElementById("lastNameErrorMsg").innerHTML = "Le nom ne doit contenir que des lettres"
+    }
+})
 
- //Si l'élément existe, mettre à jour la quantité. 
+validateAddress.addEventListener('change', function(event) {
+    if(validateText(event.target.value)) {
+        document.getElementById("addressErrorMsg").innerHTML = ""
+    } 
+})
 
- //Nouvelle quantité. 
+alidateEmai.addEventListener('change', function(event) {
+    if(validateText(event.target.value)) {
+        document.getElementById("emailErrorMsg").innerHTML = ""
+    } else {
+        document.getElementById("emailErrorMsg").innerHTML = "L'email doit contenir une @"
+    }
+})
 
- //Supprimer un produit.
+// Confirmation du formulaire à l'envoie.
+const form = document.querySelector(".cart__order__form");
 
- function deleteProduct(){
-     let todelete = document.querySelectorAll('.deleteItem');
-   //Choisir le produit à supprimer.
-   let idDelete = productLocalStorage.idProduct;
-   let colorDelete = productLocalStorage.ChoiceColors;
+ form.addEventListener('submit', function(event) {
+     event.preventDefault();
 
-   productLocalStorage = productLocalStorage.filter( el => el.idProduct || el.choiceColors == colorDelete );
-   localStorage.setItem("produit",JSON.stringify(productLocalStorage));
+     if(validateOnSubmit(event)) {
+         sendOrder()
+     }
+ })
 
+function sendOrder() {
 
- }
-//Mettre à jour le localstorage avec la nouvelle quantité. 
+     const contact = {
+         firstName: firstName.value,
+         lastName: lastName.value,
+         address: address.value,
+         city: city.value,
+         email: email.value
+     }
 
-//window.location.reload() => rafraîchir la page.
-//location.reload();
+     const products = articles.map((element) => element.idProduct)
+
+    const data = {
+         contact,
+        products
+    }
+
+    fetch("http://localhost:3000/api/products/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    })
+        .then((res) => res.json())
+        .then((res) => {
+            window.location.replace(`./confirmation.html?id=${res.orderId}`)
+
+            // Dans confirmation.js, récupérer l'identifiant depuis l'URL comme dans product.js
+            // Puis insérer l'indentifiant dans le HTML
+            // Vider le panier => localStorage.clear()
+        })
+        .catch((e) => console.log(e))
+
+}
+
+function validateOnSubmit(event) {
+
+     if(
+         validateText(firstName.value) &&
+         validateText(lastName.value) &&
+         validateAddress(address.value) &&
+         validateText(city.value) &&
+         validateEmail(email.value)
+     ) {
+         return true
+     }
+     return false
+
+}
