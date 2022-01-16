@@ -172,10 +172,6 @@ function sendOrder() {
         .then((res) => res.json())
         .then((res) => {
             window.location.replace(`./confirmation.html?id=${res.orderId}`)
-
-            // Dans confirmation.js, récupérer l'identifiant depuis l'URL comme dans product.js
-            // Puis insérer l'indentifiant dans le HTML
-            // Vider le panier => localStorage.clear()
         })
         .catch((e) => console.log(e))
 

@@ -121,19 +121,7 @@ function getPost(article){
         }
         
 
-        //Création d'un tableau pour mettre plusieurs articles dans le panier.
-        //let panier = []
-        //let recupPanier = JSON.parse(window.localStorage.getItem("panier"))
-        //if (recupPanier&&recupPanier.length){
-        //    panier = recupPanier
-      //  }
-       
-        //Mettre plusieurs articles différents dans le panier.
-        // panier.push(choiceProduct)
- 
-       // local storage
-      // window.localStorage.setItem('panier',JSON.stringify(panier))
-
+        
         
         
        
