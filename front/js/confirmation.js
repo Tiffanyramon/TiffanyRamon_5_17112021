@@ -1,18 +1,33 @@
 //Récupéreation des paramètre de l'url.
-var str = window.location.href;
-var url = new URL(str);
-var idProduct = url.searchParams.get("id");
-console.log(idProduct)
+//function idConfirm(confirm){
+  //   confirm = document.getElementById("res.orderId");
+   //  confirm.innerHTML = localStorage.getItem("res.orderId");
+   //  console.log(localStorage.getItem("res.orderId"))
+     // Vider le panier => localStorage.clear()
+   //  localStorage.clear();
+//}
 
-//création de numero de commande unique avec fonction et méthode Math.floor
- function generate() {
-         let id = () => {
-           return Math.floor((1 + Math.random()) * 0x10000000)
-               .toString(16)
-               .substring(1);
-         }
-         
-           document.getElementById("orderId").innerHTML = id();
-         }
- // Vider le panier => localStorage.clear()
-            localStorage.clear();
+ // Récupération des paramètre de l'URL.
+fetch("http://localhost:3000/api/produtc/order")
+    .then (function(res){
+      return res.json();
+    })
+
+function data(confirm){
+  confirm = document.getElementById('orderId');
+  confirm.innerText = localStorage.getItem('orderId');
+//Vider le panier
+localStorage.cleat();
+
+
+}
+
+   
+//Confirmation avec le numéro de commande a usage unique.
+  //const popUpConfirm = () => {
+  //  if(window.confirm(`Commande validée ! Votre numéro de commande est : ${id="orderId"} `)){
+     //     window.location.href = "confirmation.htlm";
+    //  }
+   //} 
+
+ 

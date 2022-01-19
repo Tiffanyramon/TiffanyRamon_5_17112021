@@ -7,7 +7,7 @@ let totalPrice = 0;
 let totalQuantity = 0; 
     articles.forEach(element => {
         let items = document.getElementById('cart__items');
-items.innerHTML += `<article class="cart__item" data-id="${element.idProduct}" data-color="${element.choiceColors}">            
+        items.innerHTML += `<article class="cart__item" data-id="${element.idProduct}" data-color="${element.choiceColors}">            
                   <div class="cart__item__img">
                   <img src="${element.productImgSrc}" alt="${element.productImgAlt}">
                 </div>
