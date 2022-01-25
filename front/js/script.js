@@ -5,7 +5,6 @@ fetch(" http://localhost:3000/api/products")
 //Récupération des données de l'API.
 
 .then (function (articles){
-  console.log(articles)
     articles.forEach(element => {
         let items =document.getElementById('items');
        items.innerHTML += `<a href="./product.html?id=${element._id}">

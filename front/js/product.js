@@ -2,8 +2,6 @@
 var str = window.location.href;
 var url = new URL(str);
 var idProduct = url.searchParams.get("id");
-console.log(idProduct)
-
 
 // Récupération des articles de l'API.
 fetch(" http://localhost:3000/api/products/" +idProduct) 
@@ -44,7 +42,7 @@ function getPost(article){
     button.addEventListener('click',function(){
         let colors = document.getElementById('colors');
         let quantity = document.getElementById('quantity');
-        console.log(colors)
+       
 
         //Récupération du choix de la couleur + alerte si produit non choisie.
         let choiceColors = colors.value;
@@ -64,7 +62,7 @@ function getPost(article){
             alert("Veuillez choisir une quantité.")
             return;
         }
-        console.log(choiceQuantity)
+      
 
 
         //Récupération de la fiche produit dans le panier.
